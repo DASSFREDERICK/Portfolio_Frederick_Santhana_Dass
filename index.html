@@ -1,1071 +1,591 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Frederick Santhana Dass | Portfolio</title>
+<!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          bg: '#050505',
+          surface: '#0d0d0e',
+          card: '#121215',
+          border: '#222228',
+          accent: '#e8ff47',
+          accent2: '#47ffe8',
+          purpleGlow: '#8b5cf6',
+          muted: '#9ca3af',
+        },
+        fontFamily: {
+          mono: ['"DM Mono"', 'monospace'],
+          sans: ['Syne', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  /* ─── CUSTOM CURSOR ─── */
   * { cursor: none !important; }
 
+  html { scroll-behavior: smooth; background: #050505; color: #f3f4f6; }
+  body { font-family: 'DM Mono', monospace; overflow-x: hidden; background: #050505; }
+
+  /* Custom Cursor */
   #cursor-dot {
-    position: fixed;
-    top: 0; left: 0;
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
+    position: fixed; top: 0; left: 0; width: 8px; height: 8px;
+    background: var(--accent, #e8ff47); border-radius: 50%; pointer-events: none;
+    z-index: 99999; transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #e8ff47;
     transition: transform 0.1s ease, background 0.2s;
-    box-shadow: 0 0 8px var(--accent);
   }
-
   #cursor-ring {
-    position: fixed;
-    top: 0; left: 0;
-    width: 36px; height: 36px;
-    border: 1.5px solid rgba(232,255,71,0.6);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s, background 0.2s;
+    position: fixed; top: 0; left: 0; width: 40px; height: 40px;
+    border: 1px solid rgba(232, 255, 71, 0.4); border-radius: 50%;
+    pointer-events: none; z-index: 99998; transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   }
-
   body.cursor-hover #cursor-dot {
-    transform: translate(-50%, -50%) scale(2.5);
-    background: var(--accent2);
-    box-shadow: 0 0 12px var(--accent2);
+    transform: translate(-50%, -50%) scale(2.2);
+    background: #47ffe8;
+    box-shadow: 0 0 15px #47ffe8;
   }
-
   body.cursor-hover #cursor-ring {
-    width: 56px; height: 56px;
-    border-color: var(--accent2);
-    background: rgba(71,255,232,0.06);
+    width: 60px; height: 60px;
+    border-color: #47ffe8;
+    background: rgba(71, 255, 232, 0.05);
   }
 
-  :root {
-    --bg: #0b0c0e;
-    --surface: #111316;
-    --border: #1e2127;
-    --accent: #e8ff47;
-    --accent2: #47ffe8;
-    --text: #f0f0ee;
-    --muted: #c8cdd6;
-    --dim: #2a2d35;
+  /* Noise Overlay */
+  .noise-overlay {
+    position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
 
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-
-  /* Noise texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.5;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2rem 3rem;
-    border-bottom: 1px solid var(--border);
-    background: rgba(11,12,14,0.85);
-    backdrop-filter: blur(12px);
-  }
-
-  .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  .nav-logo span { color: var(--accent); }
-
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-  }
-
-  nav ul a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-
-  nav ul a:hover { color: var(--accent); }
-
-  /* ─── HERO ─── */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 8rem 3rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-grid-bg {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  .hero-glow {
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(232,255,71,0.06) 0%, transparent 70%);
-    top: -100px; right: -100px;
-    pointer-events: none;
-  }
-
-  .hero-content { position: relative; max-width: 900px; }
-
-  .hero-tag {
-    display: inline-block;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid rgba(232,255,71,0.3);
-    padding: 4px 12px;
-    border-radius: 2px;
-    margin-bottom: 2rem;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-
-  h1 .line2 {
-    display: block;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(240,240,238,0.3);
-  }
-
-  .hero-desc {
-    max-width: 540px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.8;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.6s 0.2s ease both;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    animation: fadeUp 0.6s 0.3s ease both;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 22px;
-    border-radius: 2px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #0b0c0e;
-    border: 1px solid var(--accent);
-    font-weight: 500;
-  }
-
-  .btn-primary:hover {
-    background: transparent;
-    color: var(--accent);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--muted);
-    color: var(--text);
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 3rem;
-    margin-top: 5rem;
-    padding-top: 2.5rem;
-    border-top: 1px solid var(--border);
-    animation: fadeUp 0.6s 0.4s ease both;
-  }
-
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--accent);
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  /* ─── SECTIONS ─── */
-  section { padding: 6rem 3rem; }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 3.5rem;
-  }
-
-  .section-num {
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-  }
-
-  h2 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 2rem;
-    letter-spacing: -0.03em;
-  }
-
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* ─── ABOUT ─── */
-  #about { border-top: 1px solid var(--border); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
-  }
-
-  .about-text { color: var(--muted); line-height: 1.9; }
-  .about-text p { margin-bottom: 1rem; }
-
-  .skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .skill-group h4 {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent2);
-    margin-bottom: 0.6rem;
-  }
-
-  .skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    font-size: 11px;
-    padding: 3px 9px;
-    background: var(--dim);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    color: #ffffff;
-    letter-spacing: 0.04em;
-  }
-
-  /* ─── PROJECTS ─── */
-  #projects { border-top: 1px solid var(--border); }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .project-card {
-    background: var(--surface);
-    padding: 2rem;
-    transition: background 0.2s;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .project-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 0;
-    background: var(--accent);
-    transition: height 0.3s ease;
-  }
-
-  .project-card:hover { background: #13151a; }
-  .project-card:hover::before { height: 100%; }
-
-  /* Featured card gets a permanent accent edge + a subtle glow, no numbering needed since it's not part of the sequence */
-  .project-card.featured {
-    grid-column: 1 / -1;
-    background: linear-gradient(135deg, #131611 0%, var(--surface) 40%);
-  }
-
-  .project-card.featured::before { height: 100%; }
-
-  .featured-layout {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 2.5rem;
-  }
-
-  .featured-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #0b0c0e;
-    background: var(--accent);
-    padding: 3px 10px;
-    border-radius: 2px;
-    margin-bottom: 1rem;
-    width: fit-content;
-  }
-
-  .project-card.featured h3 {
-    font-size: 1.5rem;
-  }
-
-  .featured-meta {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-    margin-bottom: 1rem;
-  }
-
-  .featured-meta strong { color: var(--accent2); font-weight: 500; }
-
-  .agent-flow {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    border-left: 1px solid var(--border);
-    padding-left: 1.2rem;
-    margin-top: 0.4rem;
-  }
-
-  .agent-step { position: relative; }
-
-  .agent-step::before {
-    content: '';
-    position: absolute;
-    left: -1.45rem;
-    top: 4px;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent2);
-    box-shadow: 0 0 8px rgba(71,255,232,0.6);
-  }
-
-  .agent-step .agent-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 12.5px;
-    color: var(--text);
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .agent-step p {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 0;
-  }
-
-  .project-num {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.8rem;
-  }
-
-  .project-card h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-  }
-
-  .project-card .sub {
-    font-size: 11px;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 1rem;
-  }
-
-  .project-card p {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.7;
-    margin-bottom: 1.2rem;
-  }
-
-  .project-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: auto;
-    padding-top: 1rem;
-  }
-
-  .project-links { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-  .project-link {
-    font-size: 11px;
-    color: var(--accent2);
-    text-decoration: none;
-    letter-spacing: 0.06em;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .project-link:hover { text-decoration: underline; }
-
-  /* ─── EXPERIENCE ─── */
-  #experience { border-top: 1px solid var(--border); }
-
-  .timeline { position: relative; }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 1px;
-    background: var(--border);
-  }
-
-  .timeline-item {
-    padding-left: 2.5rem;
-    padding-bottom: 2.5rem;
-    position: relative;
-  }
-
-  .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -3px; top: 6px;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 12px rgba(232,255,71,0.5);
-  }
-
-  .timeline-meta {
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .timeline-item h3 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 4px;
-  }
-
-  .timeline-org {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 0.6rem;
-  }
-
-  .timeline-item p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  /* ─── CONTACT ─── */
-  #contact {
-    border-top: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .contact-inner { max-width: 600px; margin: 0 auto; }
-
-  .contact-inner h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    margin-bottom: 1rem;
-  }
-
-  .contact-inner p {
-    color: var(--muted);
-    margin-bottom: 2.5rem;
-    font-size: 14px;
-  }
-
-  .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-  }
-
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .contact-item:hover { color: var(--accent); }
-
-  /* ─── FOOTER ─── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 2rem 3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Orbit animation beside name */
-  .hero-name-row {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
-  }
-
-  .hero-anim-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 0.65em;
-    height: 0.65em;
-    margin-left: 0.1em;
-    vertical-align: middle;
-  }
-
-  .orbit-core {
-    position: absolute;
-    width: 28%;
-    height: 28%;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent), 0 0 24px rgba(232,255,71,0.4);
-    animation: corePulse 2s ease-in-out infinite;
-  }
-
-  .orbit-ring {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 1px solid rgba(232,255,71,0.25);
-    animation: orbitSpin 2.4s linear infinite;
-  }
-
-  .orbit-ring-2 {
-    width: 65%;
-    height: 65%;
-    border-color: rgba(71,255,232,0.3);
-    animation: orbitSpin 1.6s linear infinite reverse;
-  }
-
-  .orbit-dot {
-    position: absolute;
-    top: -3.5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 7px;
-    height: 7px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 6px var(--accent);
-  }
-
-  .orbit-ring-2 .orbit-dot {
-    background: var(--accent2);
-    box-shadow: 0 0 6px var(--accent2);
-    width: 5px;
-    height: 5px;
-    top: -2.5px;
+  /* Spotlight Background Glow */
+  .overhead-spotlight {
+    position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 500px; pointer-events: none; z-index: 0;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(232, 255, 71, 0.04) 40%, transparent 75%);
+    filter: blur(60px);
   }
 
-  @keyframes orbitSpin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+  /* Custom Glassmorphism Card Tilt & Shine */
+  .glass-card {
+    background: rgba(18, 18, 21, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(16px);
+    transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
   }
-
-  @keyframes corePulse {
-    0%, 100% { transform: scale(1); opacity: 0.9; }
-    50%       { transform: scale(1.3); opacity: 1; box-shadow: 0 0 18px var(--accent), 0 0 36px rgba(232,255,71,0.5); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+  .glass-card:hover {
+    border-color: rgba(232, 255, 71, 0.35);
+    box-shadow: 0 10px 30px -10px rgba(232, 255, 71, 0.08);
   }
 
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
+  /* Floating Physics Skill Pill */
+  @keyframes floatSlow {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(1deg); }
   }
+  .float-badge { animation: floatSlow 4s ease-in-out infinite; }
+  .float-badge:nth-child(even) { animation-duration: 5.5s; animation-delay: -1.5s; }
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    nav ul { gap: 1.2rem; }
-    section, #hero { padding: 5rem 1.5rem 3rem; }
-    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-    .featured-layout { grid-template-columns: 1fr; gap: 1.5rem; }
-    footer { flex-direction: column; gap: 8px; text-align: center; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
+  /* Hide Scrollbar for clean aesthetic */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #050505; }
+  ::-webkit-scrollbar-thumb { background: #222228; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3b3b45; }
 </style>
 </head>
-<body>
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
+<body class="bg-bg text-text selection:bg-accent selection:text-black relative">
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#hero">FSD<span>.</span></a>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+  <div class="noise-overlay"></div>
+  <div class="overhead-spotlight"></div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-tag">Solution Design &amp; Innovation Intern &nbsp;·&nbsp; Systemizer Technics</div>
-    <h1>
-      <span class="hero-name-row">Frederick<span class="hero-anim-badge" aria-hidden="true"><span class="orbit-ring"><span class="orbit-dot"></span></span><span class="orbit-ring orbit-ring-2"><span class="orbit-dot"></span></span><span class="orbit-core"></span></span></span><br>
-      <span class="line2">Santhana Dass</span>
-    </h1>
-    <p class="hero-desc">
-      Computer Engineering student (Electronics major) building embedded systems,
-      intelligent automation architectures, and full-stack solutions.
-    </p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#projects">View Projects</a>
-      <a class="btn btn-ghost" href="mailto:dassfrederick@gmail.com">Get in Touch</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/frederick-santhana-dass-15352b2a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
+  <!-- LEFT PINNED SOCIAL SIDEBAR -->
+  <aside class="hidden xl:flex fixed left-8 bottom-0 z-40 flex-col items-center gap-6 pb-12 after:content-[''] after:w-[1px] after:h-24 after:bg-border">
+    <div class="flex flex-col gap-5 text-muted">
+      <a href="https://www.linkedin.com/in/frederick-santhana-dass-15352b2a0/" target="_blank" rel="noopener" class="hover:text-accent transition-colors duration-200 -rotate-90 text-xs tracking-widest uppercase">LI</a>
+      <a href="https://github.com/DASSFREDERICK" target="_blank" rel="noopener" class="hover:text-accent transition-colors duration-200 -rotate-90 text-xs tracking-widest uppercase">GH</a>
+      <a href="mailto:dassfrederick@gmail.com" class="hover:text-accent transition-colors duration-200 -rotate-90 text-xs tracking-widest uppercase">MAIL</a>
     </div>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-num">6+</div>
-        <div class="stat-label">Projects Built</div>
-      </div>
-      <div>
-        <div class="stat-num">3+</div>
-        <div class="stat-label">Languages Spoken</div>
-      </div>
-      <div>
-        <div class="stat-num">2027</div>
-        <div class="stat-label">Expected Graduation</div>
-      </div>
-      <div>
-        <div class="stat-num">1st Dan</div>
-        <div class="stat-label">Black Belt — WTF</div>
-      </div>
-    </div>
-  </div>
-</section>
+  </aside>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-header reveal">
-    <span class="section-num">01 /</span>
-    <h2>About</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p>
-        I'm a Computer Engineering student at Multimedia University Cyberjaya, majoring in Electronics
-        with a focus on embedded systems, solution design, and full-stack applications.
-      </p>
-      <p>
-        Currently interning at Systemizer Technics in Solution Design &amp; Innovation, working across
-        automation workflows, system integration, and software development.
-      </p>
-      <p>
-        Beyond engineering, I'm a certified Black Belt (1st Dan) in Taekwondo and a coding tutor.
-        I bring that same discipline and structured problem-solving into every build.
-      </p>
-    </div>
-    <div class="skills-grid reveal">
-      <div class="skill-group">
-        <h4>Languages</h4>
-        <div class="skill-tags">
-          <span class="tag">C++ (Adv)</span>
-          <span class="tag">C (Adv)</span>
-          <span class="tag">Python</span>
-          <span class="tag">SQL</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">Node.js</span>
+  <!-- STICKY NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 md:px-16 py-5 border-b border-border bg-bg/85 backdrop-blur-md">
+    <a href="#hero" class="font-sans font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
+      FSD<span class="text-accent">.</span>
+    </a>
+    <ul class="hidden md:flex items-center gap-8 text-xs tracking-widest uppercase font-mono">
+      <li><a href="#about" class="text-muted hover:text-accent transition-colors">About</a></li>
+      <li><a href="#work" class="text-muted hover:text-accent transition-colors">Work</a></li>
+      <li><a href="#experience" class="text-muted hover:text-accent transition-colors">Experience</a></li>
+      <li><a href="#skills" class="text-muted hover:text-accent transition-colors">Tech Stack</a></li>
+      <li><a href="#contact" class="text-muted hover:text-accent transition-colors">Contact</a></li>
+    </ul>
+    <a href="mailto:dassfrederick@gmail.com" class="text-xs uppercase tracking-wider px-4 py-2 rounded bg-accent text-black font-semibold hover:bg-transparent hover:text-accent border border-accent transition-all duration-200">
+      Let's Talk
+    </a>
+  </nav>
+
+  <!-- HERO SECTION WITH INTERACTIVE 3D/EYE-TRACKING AVATAR -->
+  <section id="hero" class="min-h-screen relative flex items-center justify-center pt-28 pb-16 px-6 md:px-16 z-10">
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Hero Text -->
+      <div class="lg:col-span-7 flex flex-col items-start">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-border text-xs text-accent uppercase tracking-widest mb-6">
+          <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+          Solution Design &amp; Innovation Intern · Systemizer Technics
+        </div>
+        <h1 class="font-sans font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tighter leading-[1.05] mb-6 text-white">
+          A Creative Designer &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-white to-accent2">Developer.</span>
+        </h1>
+        <p class="text-muted text-sm sm:text-base max-w-xl leading-relaxed mb-8">
+          Hi, I’m <strong class="text-white font-normal">Frederick Santhana Dass</strong>. Computer Engineering student and full-stack builder engineering high-performance embedded systems, autonomous agents, and elegant web interfaces.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="#work" class="px-6 py-3 rounded bg-accent text-black font-semibold text-xs tracking-wider uppercase hover:bg-transparent hover:text-accent border border-accent transition-all duration-200 shadow-lg shadow-accent/10">
+            Explore Work
+          </a>
+          <a href="#contact" class="px-6 py-3 rounded bg-surface text-muted text-xs tracking-wider uppercase hover:text-white hover:border-muted border border-border transition-all duration-200">
+            Get in Touch
+          </a>
+        </div>
+
+        <div class="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-border w-full max-w-lg">
+          <div>
+            <div class="font-sans font-extrabold text-2xl text-accent">6+</div>
+            <div class="text-[11px] text-muted tracking-wider uppercase mt-1">Projects Built</div>
+          </div>
+          <div>
+            <div class="font-sans font-extrabold text-2xl text-accent2">2027</div>
+            <div class="text-[11px] text-muted tracking-wider uppercase mt-1">Graduation</div>
+          </div>
+          <div>
+            <div class="font-sans font-extrabold text-2xl text-white">1st Dan</div>
+            <div class="text-[11px] text-muted tracking-wider uppercase mt-1">Black Belt</div>
+          </div>
         </div>
       </div>
-      <div class="skill-group">
-        <h4>Hardware &amp; IoT</h4>
-        <div class="skill-tags">
-          <span class="tag">ESP32</span>
-          <span class="tag">8051 MCU</span>
-          <span class="tag">Embedded C</span>
-          <span class="tag">IoT</span>
-          <span class="tag">Sensors</span>
+
+      <!-- Right Interactive Eye-Tracking Character / 3D Head Container -->
+      <div class="lg:col-span-5 flex justify-center relative">
+        <div class="absolute inset-0 bg-gradient-to-tr from-purpleGlow/20 to-accent/10 rounded-full filter blur-3xl -z-10 transform scale-75"></div>
+        
+        <!-- Interactive Avatar / Eye-Tracking Device -->
+        <div id="avatar-container" class="relative w-72 h-80 sm:w-80 sm:h-96 glass-card rounded-2xl flex flex-col items-center justify-center p-6 shadow-2xl border border-border overflow-hidden group">
+          <div class="absolute top-4 left-4 text-[10px] text-muted tracking-widest uppercase font-mono">SYS.TRACKING // V2.6</div>
+          
+          <!-- Stylized Robotic / Developer Head Silhouette -->
+          <div class="relative w-40 h-48 bg-surface rounded-t-full border border-border flex flex-col items-center pt-10 shadow-inner group-hover:border-accent/40 transition-colors duration-300">
+            <!-- Head Highlights / Antenna -->
+            <div class="absolute -top-3 w-1 h-4 bg-accent"></div>
+            <div class="absolute -top-4 w-2.5 h-2.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_#e8ff47]"></div>
+
+            <!-- Eyes Container -->
+            <div class="flex gap-6 mt-6">
+              <!-- Left Eye -->
+              <div class="relative w-10 h-10 rounded-full bg-black border border-border flex items-center justify-center overflow-hidden">
+                <div class="pupil left-pupil absolute w-4 h-4 rounded-full bg-accent shadow-[0_0_8px_#e8ff47] transition-transform duration-75"></div>
+              </div>
+              <!-- Right Eye -->
+              <div class="relative w-10 h-10 rounded-full bg-black border border-border flex items-center justify-center overflow-hidden">
+                <div class="pupil right-pupil absolute w-4 h-4 rounded-full bg-accent shadow-[0_0_8px_#e8ff47] transition-transform duration-75"></div>
+              </div>
+            </div>
+
+            <!-- Mouth / Audio Waveform Line -->
+            <div class="w-16 h-1 bg-border rounded-full mt-12 flex justify-between px-1">
+              <div class="w-1.5 h-full bg-accent2 animate-pulse"></div>
+              <div class="w-2 h-full bg-accent"></div>
+              <div class="w-1.5 h-full bg-accent2 animate-pulse"></div>
+            </div>
+          </div>
+
+          <div class="mt-6 text-center">
+            <div class="text-xs text-white font-mono tracking-wider">Interactive Cursor Anchor</div>
+            <div class="text-[10px] text-muted mt-1">Move cursor around to engage optics</div>
+          </div>
         </div>
+
       </div>
-      <div class="skill-group">
-        <h4>Software &amp; Data</h4>
-        <div class="skill-tags">
-          <span class="tag">MySQL</span>
-          <span class="tag">SQLite</span>
-          <span class="tag">Solution Design</span>
-          <span class="tag">Full-Stack</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h4>AI / Automation</h4>
-        <div class="skill-tags">
-          <span class="tag">Agentic AI</span>
-          <span class="tag">FastAPI</span>
-          <span class="tag">LLM Orchestration</span>
-          <span class="tag">DeepSeek-V3</span>
-        </div>
-      </div>
+
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="section-header reveal">
-    <span class="section-num">02 /</span>
-    <h2>Projects</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="projects-grid reveal">
+  <!-- ABOUT & "WHAT I DO" SECTION -->
+  <section id="about" class="py-24 px-6 md:px-16 border-t border-border relative z-10">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-4 mb-14">
+        <span class="text-xs text-accent font-mono tracking-widest uppercase">01 /</span>
+        <h2 class="font-sans font-bold text-3xl tracking-tight text-white">About &amp; What I Do</h2>
+        <div class="flex-1 h-[1px] bg-border"></div>
+      </div>
 
-    <!-- FEATURED: ClutchHire AI -->
-    <div class="project-card featured">
-      <div class="featured-badge">AI Marathon 2026 · Team 27 Inch Visionaries</div>
-      <div class="featured-layout">
-        <div>
-          <h3>ClutchHire AI</h3>
-          <div class="sub">Multi-Agent Recruitment DeepSystem</div>
-          <div class="featured-meta">Built in one week for <strong>AI Marathon 2026: LLM Everywhere</strong>, a hackathon run by the APU Artificial Intelligence Club (APU AIC).</div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="lg:col-span-6 text-muted text-sm sm:text-base leading-relaxed space-y-4">
           <p>
-            An enterprise-grade automated recruitment screening engine built to remove manual talent-assessment
-            bottlenecks. Instead of a single-prompt LLM wrapper, it runs a sequential multi-agent loop orchestrated
-            entirely by an asynchronous FastAPI backend — parsing resumes, scoring candidates against a weighted
-            grading matrix, and generating human-readable hiring summaries end to end.
+            I'm a Computer Engineering student at Multimedia University Cyberjaya, majoring in Electronics with a specialized focus on embedded systems, solution design, and intelligent software applications.
           </p>
-          <div class="project-footer" style="border-top:none;padding-top:0;">
-            <div class="skill-tags">
-              <span class="tag">DeepSeek-V3 (671B MoE)</span><span class="tag">Chutes AI</span><span class="tag">FastAPI</span><span class="tag">PyMuPDF</span><span class="tag">Streamlit</span>
+          <p>
+            Currently serving as a Solution Design &amp; Innovation Intern at Systemizer Technics, I bridge hardware logic with cloud architectures and automated workflows.
+          </p>
+          <p>
+            Outside of coding, I hold a 1st Dan Black Belt in Taekwondo and serve as a coding tutor, bringing discipline, precision, and structured problem-solving to every technical challenge.
+          </p>
+        </div>
+
+        <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="text-accent text-xs font-mono tracking-widest uppercase mb-2">01 // Hardware &amp; IoT</div>
+              <h3 class="font-sans font-bold text-lg text-white mb-2">Embedded Systems</h3>
+              <p class="text-muted text-xs leading-relaxed">Designing reliable microcontrollers, ESP32 IoT nodes, sensor automation, and embedded C firmware.</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-4">
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">ESP32</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">8051 MCU</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">Sensors</span>
+            </div>
+          </div>
+
+          <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+            <div>
+              <div class="text-accent2 text-xs font-mono tracking-widest uppercase mb-2">02 // Software &amp; AI</div>
+              <h3 class="font-sans font-bold text-lg text-white mb-2">Full-Stack &amp; Agents</h3>
+              <p class="text-muted text-xs leading-relaxed">Building scalable backends, FastAPI microservices, and multi-agent LLM orchestration pipelines.</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-4">
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">Node.js</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">FastAPI</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">DeepSeek-V3</span>
             </div>
           </div>
         </div>
-        <div class="agent-flow">
-          <div class="agent-step">
-            <span class="agent-name">01 · HR Parser</span>
-            <p>Ingests job descriptions &amp; resumes, using PyMuPDF for local text extraction to isolate core technical parameters.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS / WORK SHOWCASE (BENTO GRID) -->
+  <section id="work" class="py-24 px-6 md:px-16 border-t border-border relative z-10">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-4 mb-14">
+        <span class="text-xs text-accent font-mono tracking-widest uppercase">02 /</span>
+        <h2 class="font-sans font-bold text-3xl tracking-tight text-white">Selected Work</h2>
+        <div class="flex-1 h-[1px] bg-border"></div>
+      </div>
+
+      <!-- Bento Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        
+        <!-- Featured Project (Span 12) -->
+        <div class="md:col-span-12 glass-card rounded-2xl p-8 relative overflow-hidden group">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full filter blur-3xl pointer-events-none"></div>
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <span class="px-3 py-1 bg-accent text-black text-[10px] font-mono tracking-wider uppercase font-bold rounded">AI Marathon 2026 · Featured DeepSystem</span>
+            <span class="text-xs text-muted font-mono">APU Artificial Intelligence Club Hackathon</span>
           </div>
-          <div class="agent-step">
-            <span class="agent-name">02 · Matrix Scorer</span>
-            <p>Cross-evaluates candidate data against a strict 5-category weighted grading matrix.</p>
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7">
+              <h3 class="font-sans font-extrabold text-2xl sm:text-3xl text-white mb-2">ClutchHire AI</h3>
+              <div class="text-xs text-accent uppercase tracking-widest mb-4">Multi-Agent Recruitment DeepSystem</div>
+              <p class="text-muted text-sm sm:text-base leading-relaxed mb-6">
+                An enterprise-grade automated recruitment screening engine built to remove manual talent assessment bottlenecks. It runs a sequential multi-agent loop orchestrated by an asynchronous FastAPI backend — parsing resumes with PyMuPDF, scoring candidates against weighted grading matrices, and generating human-readable hiring summaries.
+              </p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="text-xs px-2.5 py-1 bg-surface border border-border rounded text-white font-mono">DeepSeek-V3 (671B MoE)</span>
+                <span class="text-xs px-2.5 py-1 bg-surface border border-border rounded text-white font-mono">FastAPI</span>
+                <span class="text-xs px-2.5 py-1 bg-surface border border-border rounded text-white font-mono">PyMuPDF</span>
+                <span class="text-xs px-2.5 py-1 bg-surface border border-border rounded text-white font-mono">Streamlit</span>
+              </div>
+              <div class="flex items-center gap-6">
+                <a href="https://lnkd.in/gnuHq2Pi" target="_blank" rel="noopener" class="text-xs text-accent2 hover:underline tracking-wider uppercase font-mono flex items-center gap-1">Demo Video ↗</a>
+                <a href="https://lnkd.in/g5ABp5Ja" target="_blank" rel="noopener" class="text-xs text-accent2 hover:underline tracking-wider uppercase font-mono flex items-center gap-1">Repository ↗</a>
+              </div>
+            </div>
+            <div class="lg:col-span-5 bg-surface/80 border border-border rounded-xl p-5 font-mono text-xs space-y-3">
+              <div class="text-accent2 text-[11px] uppercase tracking-widest font-bold mb-2">Multi-Agent Pipeline</div>
+              <div class="border-l border-border pl-3 space-y-3">
+                <div>
+                  <span class="text-white font-semibold block mb-0.5">01 · HR Parser Agent</span>
+                  <p class="text-muted text-[11px]">Ingests job descriptions and candidate resumes, extracting structured technical parameters.</p>
+                </div>
+                <div>
+                  <span class="text-white font-semibold block mb-0.5">02 · Matrix Scorer Agent</span>
+                  <p class="text-muted text-[11px]">Evaluates candidate profiles against a strict 5-category weighted grading schema.</p>
+                </div>
+                <div>
+                  <span class="text-white font-semibold block mb-0.5">03 · Executive Explainer</span>
+                  <p class="text-muted text-[11px]">Synthesizes numerical evaluations into professional executive summary briefs.</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="agent-step">
-            <span class="agent-name">03 · Executive Explainer</span>
-            <p>Translates raw metrics into narrative summaries and flags key technical-stack gaps.</p>
+        </div>
+
+        <!-- Project 1 (Span 6) -->
+        <div class="md:col-span-6 glass-card rounded-2xl p-6 flex flex-col justify-between group">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-xs text-muted font-mono">001 // Capstone</span>
+              <span class="text-[10px] text-accent uppercase tracking-widest font-mono">Embedded IoT</span>
+            </div>
+            <h3 class="font-sans font-bold text-xl text-white mb-2">Smart AI Desk Fan</h3>
+            <p class="text-muted text-xs sm:text-sm leading-relaxed mb-6">
+              Voice-controlled smart fan using ESP32 &amp; VC02 AI Thinker. Automatically adjusts speed based on real-time voice commands and logs preferences to an embedded database.
+            </p>
+          </div>
+          <div>
+            <div class="flex flex-wrap gap-1.5 mb-4">
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">ESP32</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">Arduino/C++</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">Voice Module</span>
+            </div>
           </div>
         </div>
+
+        <!-- Project 2 (Span 6) -->
+        <div class="md:col-span-6 glass-card rounded-2xl p-6 flex flex-col justify-between group">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-xs text-muted font-mono">002 // Full-Stack</span>
+              <span class="text-[10px] text-accent uppercase tracking-widest font-mono">Backend App</span>
+            </div>
+            <h3 class="font-sans font-bold text-xl text-white mb-2">Budgetmate</h3>
+            <p class="text-muted text-xs sm:text-sm leading-relaxed mb-6">
+              Personal finance management app powered by Node.js and SQLite. Tracks daily expenditures, financial transactions, and budget targets with clean schema design.
+            </p>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-wrap gap-1.5">
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">Node.js</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">SQLite</span>
+              <span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">JavaScript</span>
+            </div>
+            <a href="https://github.com/DASSFREDERICK/Budgetmate_Draft_Only" target="_blank" rel="noopener" class="text-xs text-accent2 hover:underline uppercase font-mono">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- Project 3 (Span 4) -->
+        <div class="md:col-span-4 glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <span class="text-xs text-muted font-mono block mb-3">003 // Database System</span>
+            <h3 class="font-sans font-bold text-lg text-white mb-2">Ticketify</h3>
+            <p class="text-muted text-xs leading-relaxed mb-4">Normalized relational ticketing database with optimized SQL queries, integrity constraints, and reporting routines.</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5"><span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">MySQL</span></div>
+        </div>
+
+        <!-- Project 4 (Span 4) -->
+        <div class="md:col-span-4 glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <span class="text-xs text-muted font-mono block mb-3">004 // C++ OOP</span>
+            <h3 class="font-sans font-bold text-lg text-white mb-2">Flashcard Learning System</h3>
+            <p class="text-muted text-xs leading-relaxed mb-4">Terminal flashcard app built with robust OOP principles, file-based persistence, and randomized quiz modes.</p>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-wrap gap-1.5"><span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">C++</span></div>
+            <a href="https://github.com/DASSFREDERICK/flashcard-01-cpp" target="_blank" rel="noopener" class="text-xs text-accent2 hover:underline uppercase font-mono">GitHub ↗</a>
+          </div>
+        </div>
+
+        <!-- Project 5 (Span 4) -->
+        <div class="md:col-span-4 glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <span class="text-xs text-muted font-mono block mb-3">005 // Embedded Automation</span>
+            <h3 class="font-sans font-bold text-lg text-white mb-2">Smart Irrigation System</h3>
+            <p class="text-muted text-xs leading-relaxed mb-4">Automated plant watering system using an 8051 microcontroller and soil moisture sensors to minimize water usage.</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5"><span class="text-[10px] px-2 py-0.5 bg-surface border border-border rounded text-white font-mono">Embedded C</span></div>
+        </div>
+
       </div>
-      <div class="project-footer">
-        <div class="project-links">
-          <a class="project-link" href="https://lnkd.in/gnuHq2Pi" target="_blank" rel="noopener">Demo Video ↗</a>
-          <a class="project-link" href="https://lnkd.in/g5ABp5Ja" target="_blank" rel="noopener">Repository ↗</a>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE SECTION -->
+  <section id="experience" class="py-24 px-6 md:px-16 border-t border-border relative z-10">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center gap-4 mb-14">
+        <span class="text-xs text-accent font-mono tracking-widest uppercase">03 /</span>
+        <h2 class="font-sans font-bold text-3xl tracking-tight text-white">Experience</h2>
+        <div class="flex-1 h-[1px] bg-border"></div>
+      </div>
+
+      <div class="relative border-l border-border ml-2 md:ml-4 space-y-10 pl-6 md:pl-8">
+        
+        <div class="relative group">
+          <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-3 h-3 rounded-full bg-accent border-2 border-bg shadow-[0_0_10px_#e8ff47]"></div>
+          <div class="text-xs text-accent font-mono tracking-wider uppercase mb-1">2026 – Present</div>
+          <h3 class="font-sans font-bold text-xl text-white">Solution Design &amp; Innovation Intern</h3>
+          <div class="text-xs text-muted mb-3 font-mono">Systemizer Technics</div>
+          <p class="text-muted text-xs sm:text-sm leading-relaxed">Collaborating on advanced solution architectures, workflow automation, and technological innovation initiatives to streamline internal business operations.</p>
+        </div>
+
+        <div class="relative group">
+          <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-3 h-3 rounded-full bg-accent2 border-2 border-bg shadow-[0_0_10px_#47ffe8]"></div>
+          <div class="text-xs text-accent2 font-mono tracking-wider uppercase mb-1">2025 – 2026</div>
+          <h3 class="font-sans font-bold text-xl text-white">Coding Tutor — C++ &amp; Python</h3>
+          <div class="text-xs text-muted mb-3 font-mono">Rune Codes Academy</div>
+          <p class="text-muted text-xs sm:text-sm leading-relaxed">Taught fundamental and intermediate programming concepts. Guided students through algorithm debugging, logical reasoning, and industry coding best practices.</p>
+        </div>
+
+        <div class="relative group">
+          <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-3 h-3 rounded-full bg-border border-2 border-bg"></div>
+          <div class="text-xs text-muted font-mono tracking-wider uppercase mb-1">2025 – Present</div>
+          <h3 class="font-sans font-bold text-xl text-white">Freelance Mathematics Tutor</h3>
+          <div class="text-xs text-muted mb-3 font-mono">Self-Employed</div>
+          <p class="text-muted text-xs sm:text-sm leading-relaxed">Delivered customized tutoring sessions improving student performance through clear, structured mathematical breakdowns.</p>
+        </div>
+
+        <div class="relative group">
+          <div class="absolute -left-[31px] md:-left-[39px] top-1.5 w-3 h-3 rounded-full bg-border border-2 border-bg"></div>
+          <div class="text-xs text-muted font-mono tracking-wider uppercase mb-1">2024</div>
+          <h3 class="font-sans font-bold text-xl text-white">Student Barista &amp; Entrepreneur</h3>
+          <div class="text-xs text-muted mb-3 font-mono">Nescafe Entrepreneurship Program</div>
+          <p class="text-muted text-xs sm:text-sm leading-relaxed">Managed day-to-day sales operations, customer engagement, and applied retail marketing strategies to meet sales targets.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK (INTERACTIVE FLOATING PHYSICS BADGES) -->
+  <section id="skills" class="py-24 px-6 md:px-16 border-t border-border relative z-10 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-4 mb-14">
+        <span class="text-xs text-accent font-mono tracking-widest uppercase">04 /</span>
+        <h2 class="font-sans font-bold text-3xl tracking-tight text-white">Tech Stack &amp; Skills</h2>
+        <div class="flex-1 h-[1px] bg-border"></div>
+      </div>
+
+      <p class="text-muted text-sm max-w-xl mb-12">
+        A floating matrix of languages, frameworks, and engineering tools utilized across hardware and software developments.
+      </p>
+
+      <!-- Floating Pills Grid -->
+      <div class="flex flex-wrap gap-4 items-center justify-center py-8">
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span> C++ (Adv)
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent2"></span> Python
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-purple-400"></span> Node.js
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span> FastAPI
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent2"></span> ESP32 &amp; IoT
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-purple-400"></span> Embedded C
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span> SQL / MySQL
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent2"></span> SQLite
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-purple-400"></span> Solution Design
+        </div>
+        <div class="float-badge glass-card px-5 py-3 rounded-full text-xs font-mono text-white border border-border shadow-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span> Agentic AI
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="project-card">
-      <div class="project-num">001</div>
-      <h3>Smart AI Desk Fan</h3>
-      <div class="sub">Capstone Project</div>
-      <p>Voice-controlled smart fan using ESP32 &amp; VC02 AI Thinker. Auto-adjusts speed based on real-time voice commands and learns user behavior via a connected database.</p>
-      <div class="project-footer">
-        <div class="skill-tags">
-          <span class="tag">ESP32</span><span class="tag">Arduino/C++</span><span class="tag">AI</span>
-        </div>
+  <!-- CONTACT SECTION -->
+  <section id="contact" class="py-28 px-6 md:px-16 border-t border-border text-center relative z-10">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="font-sans font-extrabold text-4xl sm:text-5xl tracking-tight text-white mb-4">Let's work together.</h2>
+      <p class="text-muted text-sm sm:text-base mb-8">
+        Interested in collaborating on engineering projects or discussing technology solutions? Drop me a message.
+      </p>
+      <a href="mailto:dassfrederick@gmail.com" class="inline-block px-8 py-4 rounded bg-accent text-black font-semibold text-xs tracking-widest uppercase hover:bg-transparent hover:text-accent border border-accent transition-all duration-200 shadow-xl shadow-accent/10 mb-12">
+        dassfrederick@gmail.com
+      </a>
+      <div class="flex justify-center gap-8 text-xs font-mono text-muted uppercase tracking-widest">
+        <a href="https://www.linkedin.com/in/frederick-santhana-dass-15352b2a0/" target="_blank" rel="noopener" class="hover:text-accent transition-colors">LinkedIn ↗</a>
+        <a href="https://github.com/DASSFREDERICK" target="_blank" rel="noopener" class="hover:text-accent transition-colors">GitHub ↗</a>
+        <span>011-10997273</span>
       </div>
     </div>
+  </section>
 
-    <div class="project-card">
-      <div class="project-num">002</div>
-      <h3>Budgetmate</h3>
-      <div class="sub">Full-Stack App</div>
-      <p>Personal finance management app with Node.js and SQLite. Tracks expenses, transactions, and budget targets with a clean back-end and database schema.</p>
-      <div class="project-footer">
-        <div class="skill-tags">
-          <span class="tag">Node.js</span><span class="tag">SQLite</span><span class="tag">JS</span>
-        </div>
-        <a class="project-link" href="https://github.com/DASSFREDERICK/Budgetmate_Draft_Only" target="_blank" rel="noopener">GitHub ↗</a>
-      </div>
-    </div>
+  <!-- FOOTER -->
+  <footer class="border-t border-border px-6 md:px-16 py-8 flex flex-col sm:flex-row justify-between items-center text-xs text-muted font-mono gap-4 relative z-10">
+    <span>© 2026 Frederick Santhana Dass</span>
+    <span>Computer Engineering · MMU Cyberjaya</span>
+  </footer>
 
-    <div class="project-card">
-      <div class="project-num">003</div>
-      <h3>Ticketify</h3>
-      <div class="sub">Database System</div>
-      <p>Normalized relational ticketing database with optimized schema, integrity constraints, and SQL queries for reporting and data maintenance operations.</p>
-      <div class="project-footer">
-        <div class="skill-tags">
-          <span class="tag">SQL</span><span class="tag">MySQL</span>
-        </div>
-      </div>
-    </div>
+  <!-- JAVASCRIPT: Custom Cursor & Real-Time Eye Tracking Logic -->
+  <script>
+    // Custom Cursor Motion
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-    <div class="project-card">
-      <div class="project-num">004</div>
-      <h3>Flashcard Learning System</h3>
-      <div class="sub">OOP / C++</div>
-      <p>Terminal flashcard app built with OOP principles. Supports file-based data persistence and randomized quiz mode using modular, maintainable architecture.</p>
-      <div class="project-footer">
-        <div class="skill-tags">
-          <span class="tag">C++</span><span class="tag">File I/O</span><span class="tag">OOP</span>
-        </div>
-        <a class="project-link" href="https://github.com/DASSFREDERICK/flashcard-01-cpp" target="_blank" rel="noopener">GitHub ↗</a>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="project-num">005</div>
-      <h3>Smart Irrigation System</h3>
-      <div class="sub">Embedded Automation</div>
-      <p>Automated irrigation system using an 8051 microcontroller and soil moisture sensors to control a water pump in real time, reducing water waste.</p>
-      <div class="project-footer">
-        <div class="skill-tags">
-          <span class="tag">Embedded C</span><span class="tag">8051</span><span class="tag">IoT</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="section-header reveal">
-    <span class="section-num">03 /</span>
-    <h2>Experience</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="timeline reveal">
-
-    <div class="timeline-item">
-      <div class="timeline-meta">2026 – Present</div>
-      <h3>Solution Design &amp; Innovation Intern</h3>
-      <div class="timeline-org">Systemizer Technics</div>
-      <p>Collaborating on solution architectures, system automation, and technological innovation initiatives to streamline business and engineering workflows.</p>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-meta">2025 – 2026</div>
-      <h3>Coding Tutor — C++ &amp; Python</h3>
-      <div class="timeline-org">Rune Codes Academy</div>
-      <p>Taught programming fundamentals and intermediate concepts. Guided students in debugging, logic development, and coding best practices.</p>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-meta">2025 – Present</div>
-      <h3>Freelance Mathematics Tutor</h3>
-      <div class="timeline-org">Self-Employed</div>
-      <p>Delivered customized tutoring sessions improving student performance. Simplified complex mathematical concepts through structured explanations.</p>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-meta">2024</div>
-      <h3>Student Barista &amp; Entrepreneur</h3>
-      <div class="timeline-org">Nescafe Entrepreneurship Program</div>
-      <p>Managed daily sales operations, customer interactions, and applied marketing strategies to achieve consistent sales targets.</p>
-    </div>
-
-    <div class="timeline-item">
-      <div class="timeline-meta">2020 – 2023</div>
-      <h3>Online Reseller — Electronics &amp; Tech</h3>
-      <div class="timeline-org">Self-Employed</div>
-      <p>Handled sourcing, pricing, and online sales of tech products. Conducted market analysis to identify profitable opportunities.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-inner">
-    <h2 class="reveal">Let's work<br>together.</h2>
-    <p class="reveal">Interested in collaborating on engineering projects or discussing technology solutions? Drop me a message.</p>
-    <a class="btn btn-primary reveal" href="mailto:dassfrederick@gmail.com">dassfrederick@gmail.com</a>
-    <div class="contact-links reveal">
-      <a class="contact-item" href="https://www.linkedin.com/in/frederick-santhana-dass-15352b2a0/" target="_blank" rel="noopener">↗ LinkedIn</a>
-      <a class="contact-item" href="https://github.com/DASSFREDERICK" target="_blank" rel="noopener">↗ GitHub</a>
-      <span class="contact-item">011-10997273</span>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <span>© 2026 Frederick Santhana Dass</span>
-  <span>Computer Engineering · MMU Cyberjaya</span>
-</footer>
-
-<script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        e.target.style.transitionDelay = (i * 0.05) + 's';
-        e.target.classList.add('visible');
-      }
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
     });
-  }, { threshold: 0.1 });
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    function animateCursorRing() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateCursorRing);
+    }
+    animateCursorRing();
 
-  // Custom cursor
-  const dot = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
+    // Hover state activation for interactive items
+    document.querySelectorAll('a, button, .glass-card, input, textarea').forEach((el) => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
 
-  document.addEventListener('mousemove', e => {
-    dotX = e.clientX; dotY = e.clientY;
-    dot.style.left = dotX + 'px';
-    dot.style.top  = dotY + 'px';
-  });
+    // Real-Time Eye Tracking Trigonometry ($atan2$)
+    const leftPupil = document.querySelector('.left-pupil');
+    const rightPupil = document.querySelector('.right-pupil');
 
-  // Ring follows with a lag
-  function animateRing() {
-    ringX += (dotX - ringX) * 0.12;
-    ringY += (dotY - ringY) * 0.12;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
+    window.addEventListener('mousemove', (e) => {
+      const pupils = [leftPupil, rightPupil];
+      pupils.forEach((pupil) => {
+        if (!pupil) return;
+        const rect = pupil.parentElement.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
 
-  // Hover effect on interactive elements
-  document.querySelectorAll('a, button, .btn, .project-card').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-  });
-</script>
+        const radian = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        const maxDistance = 6; // Max pixel offset inside eye socket
+        const distance = Math.min(maxDistance, Math.hypot(e.clientX - centerX, e.clientY - centerY) * 0.1);
 
+        const offsetX = Math.cos(radian) * distance;
+        const offsetY = Math.sin(radian) * distance;
+
+        pupil.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+    });
+  </script>
 </body>
 </html>
